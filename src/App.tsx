@@ -10,12 +10,18 @@ const App: React.FC = () => {
   const [result, setResult] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [theme, setTheme] = useState("light");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const kodamResult = await fetchKodam();
-    setResult(` ${name}! ${kodamResult}`);
-    setIsOpen(true);
+    setLoading(true);
+
+    setTimeout(async () => {
+      const kodamResult = await fetchKodam();
+      setResult(` ${name}! ${kodamResult}`);
+      setLoading(false);
+      setIsOpen(true);
+    }, 2000);
   };
 
   const handleThemeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -61,6 +67,11 @@ const App: React.FC = () => {
           <button type="submit" className="btn btn-primary w-full">
             Cek
           </button>
+          {loading && (
+            <div className="flex justify-center mt-4">
+              <span className="loading loading-dots loading-lg"></span>
+            </div>
+          )}
         </form>
       </div>
 
